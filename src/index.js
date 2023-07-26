@@ -6,6 +6,7 @@ const fs = require("fs");
 
 const { getObjectURL } = require("./s3-client");
 const { uploadAvatar } = require("./controllers/avatarController");
+const { uploadProductImage } = require("./controllers/productController");
 
 const app = express();
 app.use(cors());
@@ -50,6 +51,7 @@ app.get("/file", async (req, res) => {
 });
 
 app.post("/upload-avatar", upload.single("file"), uploadAvatar);
+app.post("/upload-product-image", upload.single("file"), uploadProductImage);
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
