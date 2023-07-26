@@ -5,6 +5,7 @@ const {
   GetObjectCommand,
 } = require("@aws-sdk/client-s3");
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
+const fs = require("fs");
 
 const AWS_BUCKET_NAME = process.env.AWS_BUCKET_NAME;
 const AWS_BUCKET_REGION = process.env.AWS_BUCKET_REGION;
@@ -19,17 +20,16 @@ const client = new S3Client({
   },
 });
 
-async function putObject(filename) {
-  const fileExtension = filename.split(".").pop().toLowerCase();
+async function putObject(pathFile, key) {
+  const stream = fs.createReadStream(pathFile);
 
   const command = new PutObjectCommand({
     Bucket: AWS_BUCKET_NAME,
-    Key: filename,
-    ContentType: fileExtension,
+    Key: key,
+    Body: stream,
   });
-
-  const url = await getSignedUrl(client, command, { expiresIn: 20 });
-  return url;
+  await client.send(command);
+  return key;
 }
 
 async function getObjectURL(key) {
@@ -38,7 +38,7 @@ async function getObjectURL(key) {
     Key: key,
   });
 
-  const url = await getSignedUrl(client, command, { expiresIn: 20 });
+  const url = await getSignedUrl(client, command, { expiresIn: 300 });
   return {
     success: true,
     data: {
