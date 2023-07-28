@@ -1,11 +1,12 @@
-require("dotenv").config();
+const fs = require("fs");
 const {
   S3Client,
   PutObjectCommand,
   GetObjectCommand,
 } = require("@aws-sdk/client-s3");
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
-const fs = require("fs");
+
+require("dotenv").config();
 
 const AWS_BUCKET_NAME = process.env.AWS_BUCKET_NAME;
 const AWS_BUCKET_REGION = process.env.AWS_BUCKET_REGION;
@@ -32,19 +33,14 @@ async function putObject(pathFile, key) {
   return key;
 }
 
-async function getObjectURL(key) {
+async function getObjectUrl(key) {
   const command = new GetObjectCommand({
     Bucket: AWS_BUCKET_NAME,
     Key: key,
   });
 
   const url = await getSignedUrl(client, command, { expiresIn: 300 });
-  return {
-    success: true,
-    data: {
-      url,
-    },
-  };
+  return url;
 }
 
-module.exports = { putObject, getObjectURL };
+module.exports = { putObject, getObjectUrl };

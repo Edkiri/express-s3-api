@@ -3,8 +3,7 @@ const cors = require("cors");
 const multer = require("multer");
 const fs = require("fs");
 
-
-const { getObjectURL } = require("./s3-client");
+const { getObjectUrl } = require("./s3-client");
 const { uploadAvatar } = require("./controllers/avatarController");
 const { uploadProductImage } = require("./controllers/productController");
 
@@ -37,11 +36,11 @@ app.get("/", (req, res) => {
   });
 });
 
-app.get("/file", async (req, res) => {
+app.post("/file", async (req, res) => {
   const { key } = req.body;
   if (key) {
-    const url = await getObjectURL(key);
-    res.send(url);
+    const url = await getObjectUrl(key);
+    res.json({ url });
   } else {
     res.status(400).json({
       success: false,

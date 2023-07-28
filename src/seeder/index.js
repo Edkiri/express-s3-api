@@ -7,7 +7,7 @@ function seed() {
   try {
     dataArray.forEach((productData) => {
       const { fileName } = productData;
-      const filePath = path.resolve("src/seeder/images/", fileName); // Replace with the actual file path
+      const filePath = path.resolve("src/seeder/images/", fileName);
       fs.readFile(filePath, "utf8", async (err, data) => {
         if (err) {
           console.error("Error reading the file:", err);

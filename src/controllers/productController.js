@@ -23,8 +23,6 @@ const uploadProductImage = async (req, res) => {
     fs.unlink(pathTempFile, (err) => {
       if (err) {
         console.error("Error deleting the file:", err);
-      } else {
-        console.log("File deleted from the local disk");
       }
     });
 
