@@ -8,7 +8,11 @@ const { uploadAvatar } = require("./controllers/avatarController");
 const { uploadProductImage } = require("./controllers/productController");
 
 const app = express();
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://market-react-ui.vercel.app",
+  })
+);
 app.use(express.json());
 
 const storage = multer.diskStorage({
